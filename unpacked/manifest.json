@@ -1,0 +1,11 @@
+{
+  "name": "Stack Search",
+  "description": "Search your favorite Stack Exchange Site",
+  "version": "0.1",
+  "permissions": ["contextMenus"],
+  "icons": {
+	"16": "icon-little.png",
+	"128": "icon-big.png"
+  },
+  "background_page": "background.html"
+}
