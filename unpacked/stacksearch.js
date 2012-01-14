@@ -8,7 +8,7 @@ var se_site_list = [
 	["http://english.stackexchange.com","English Language and Usage"],
 	["http://apple.stackexchange.com","Apple"],
 	["http://wordpress.stackexchange.com","WordPress"],
-	["http://unix.stackexchange.com","Unix and Linux"]
+	["http://unix.stackexchange.com","Unix and Linux"],
 	["http://askubuntu.com","Ask Ubuntu"],
 	["http://meta.askubuntu.com","Ask Ubuntu Meta"],
 	["http://stackoverflow.com","Stack Overflow"],
