@@ -1,7 +1,43 @@
 <html>
 	<head>
 		<title>Stack Search Options</title>
+		<style type="text/css">
+			html,body,ul,li {
+				margin: 0;
+				padding: 0;
+			}
+			table {
+				border-collapse:collapse;
+				border-spacing:0;
+			}
+			fieldset,img { 
+				border:0;
+			}
+			ol,ul {
+				list-style:none;
+			}
+			caption,th {
+				text-align:left;
+			}
+			q:before,q:after {
+				content:'';
+			}
+			abbr,acronym { border:0;}
+			label { cursor:pointer;}
+			label, ul, h1, h2, h3 { padding: 0 12px;}
+			li:hover { background-color: #ff0;}
+			.alt { background-color: #efefef;}
+		</style>
 		<script type="text/javascript">
+		var contains = function(needle, haystack) {
+			var i = haystack.length;
+			while (i--) {
+				if (haystack[i][0] == needle[0]) {
+					return true;
+				}
+			}
+			return false;
+		}
 		/* Site list
 		 * add and remove sites you wish to search from this list
 		 * format: 
@@ -9,7 +45,7 @@
 		 * */
 		 // this list needs attention..
 		var se_site_list = [
-				["1", "1", "http://stackoverflow.com", "Stack Overflow"],
+				["1", "http://stackoverflow.com", "Stack Overflow"],
 				["2", "http://serverfault.com", "Server Fault"],
 				["3", "http://superuser.com", "Super User"],
 				["4", "http://meta.stackoverflow.com", "Meta Stack Overflow"],
@@ -111,42 +147,35 @@
 				["90", "http://judaism.stackexchange.com", "Jewish Life and Learning"]
 			];
 		function run() {
-			var used_list, used_list_elm = document.getElementById('active_list'), unused_list_elm = document.getElementById('inactive_list');
-			if( localStorage["ss_site_list"] ) {
-				try{
-					console.log( JSON.parse(localStorage["ss_site_list"]) );
-					used_list = JSON.parse(localStorage["ss_site_list"]);
-					for( var i = 0, l = used_list.length; i < l; i++ ) {
-						var node = document.createElement('li');
-						node.appendChild(document.createTextNode(used_list[i][2]));
-						used_list_elm.appendChild( node );
-					}
-				} catch(e) {
-					console.log( "Invalid JSON: " + e );
-				}
-			}
+			var selected_list = chrome.extension.getBackgroundPage().json_to_array( localStorage["ss_site_list"] );
+			var site_options_list = document.getElementById('site_options_list');
 			for( var i = 0, l = se_site_list.length; i < l; i++ ) {
-				var node = document.createElement( 'option' );
-				node.value = se_site_list[i][0];
-				node.appendChild( document.createTextNode( se_site_list[i][2] ) );
-				unused_list_elm.appendChild( node );
+
+				var checked = "";
+				if( contains( se_site_list[i], selected_list ) ) {
+					checked = " checked=\"checked\"";
+				}
+				var itemHTML = "<li" + (i%2 ? " class=\"alt\"" : "") + "><label><input type=\"checkbox\"" + checked + " value=\"" + i + "\" name=\"sites[]\" />" + se_site_list[i][2] + "</label></li>";
+
+				site_options_list.innerHTML += itemHTML;
 			}
-		}
-		function update(which) {
-			var i = which.selectedIndex;
-			console.log(i);
 		}
 		function save_options() {
-			//localStorage["ss_site_list"] = "Options updated";
-			chrome.extension.getBackgroundPage().se_site_list = se_site_list;
+			var selected = [];
+			for( var i = 0, l = site_options_list.children.length; i < l; i++ ) {
+				var checkbox_node = site_options_list.children[i].children[0].children[0];
+				if( checkbox_node.checked ) {
+					selected.push(se_site_list[checkbox_node.value]);
+				}
+			}
+			localStorage["ss_site_list"] = JSON.stringify( selected );
 			chrome.extension.getBackgroundPage().updateMenus();
 		}
 		</script>
 	</head>
 	<body onload="run()">
 		<h1>Stack Search Options</h1>
-		<select id="inactive_list" onchange="update(this)"></select>
-		<ul id="active_list"></ul>
+		<ul id="site_options_list"></ul>
 		<button onclick="save_options()">Save Options</button>
 	</body>
 </html>
