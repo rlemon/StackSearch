@@ -24,7 +24,7 @@
 			}
 			abbr,acronym { border:0;}
 			label { cursor:pointer;}
-			label, ul, h1, h2, h3 { padding: 0 12px;}
+			label, ul, h1, h2, h3, p { padding: 0 12px;}
 			li:hover { background-color: #ff0;}
 			.alt { background-color: #efefef;}
 		</style>
@@ -170,11 +170,14 @@
 			}
 			localStorage["ss_site_list"] = JSON.stringify( selected );
 			chrome.extension.getBackgroundPage().updateMenus();
+			//window.location.reload();
+			alert("Your settings have been saved!");
 		}
 		</script>
 	</head>
 	<body onload="run()">
 		<h1>Stack Search Options</h1>
+		<p>Please select the sites you wish to appear in your context menu search</p>
 		<ul id="site_options_list"></ul>
 		<button onclick="save_options()">Save Options</button>
 	</body>
