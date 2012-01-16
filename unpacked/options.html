@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<title>Stack Search Options</title>
+		<script type="text/javascript">
+		/* Site list
+		 * add and remove sites you wish to search from this list
+		 * format: 
+		 * 		["SITE_URL",	"SITE DISPLAY NAME"]
+		 * */
+		 // this list needs attention..
+		var se_site_list = [
+				["1", "1", "http://stackoverflow.com", "Stack Overflow"],
+				["2", "http://serverfault.com", "Server Fault"],
+				["3", "http://superuser.com", "Super User"],
+				["4", "http://meta.stackoverflow.com", "Meta Stack Overflow"],
+				["5", "http://webapps.stackexchange.com", "Web Applications"],
+				["6", "http://meta.webapps.stackexchange.com", "Web Applications Meta"],
+				["7", "http://gaming.stackexchange.com", "Gaming"],
+				["8", "http://meta.gaming.stackexchange.com", "Gaming Meta"],
+				["9", "http://webmasters.stackexchange.com", "Webmasters"],
+				["10", "http://meta.webmasters.stackexchange.com", "Webmasters Meta"],
+				["11", "http://cooking.stackexchange.com", "Cooking"],
+				["12", "http://meta.cooking.stackexchange.com", "Cooking Meta"],
+				["13", "http://gamedev.stackexchange.com", "Game Development"],
+				["14", "http://meta.gamedev.stackexchange.com", "Game Development Meta"],
+				["15", "http://photo.stackexchange.com", "Photography"],
+				["16", "http://meta.photo.stackexchange.com", "Photography Meta"],
+				["17", "http://stats.stackexchange.com", "Statistical Analysis"],
+				["18", "http://meta.stats.stackexchange.com", "Statistical Analysis Meta"],
+				["19", "http://math.stackexchange.com", "Mathematics"],
+				["10", "http://meta.math.stackexchange.com", "Mathematics Meta"],
+				["11", "http://diy.stackexchange.com", "Home Improvement"],
+				["12", "http://meta.diy.stackexchange.com", "Home Improvement Meta"],
+				["13", "http://meta.superuser.com", "Meta Super User"],
+				["14", "http://meta.serverfault.com", "Meta Server Fault"],
+				["15", "http://gis.stackexchange.com", "GIS"],
+				["16", "http://meta.gis.stackexchange.com", "GIS Meta"],
+				["17", "http://tex.stackexchange.com", "TeX - LaTeX"],
+				["18", "http://meta.tex.stackexchange.com", "TeX - LaTeX Meta"],
+				["19", "http://askubuntu.com", "Ask Ubuntu"],
+				["10", "http://meta.askubuntu.com", "Ask Ubuntu Meta"],
+				["21", "http://money.stackexchange.com", "Personal Finance and Money"],
+				["22", "http://meta.money.stackexchange.com", "Personal Finance and Money Meta"],
+				["23", "http://english.stackexchange.com", "English Language and Usage"],
+				["24", "http://meta.english.stackexchange.com", "English Language and Usage Meta"],
+				["25", "http://stackapps.com", "Stack Apps"],
+				["26", "http://ux.stackexchange.com", "User Experience"],
+				["27", "http://meta.ux.stackexchange.com", "User Experience Meta"],
+				["28", "http://unix.stackexchange.com", "Unix and Linux"],
+				["29", "http://meta.unix.stackexchange.com", "Unix and Linux Meta"],
+				["30", "http://wordpress.stackexchange.com", "WordPress"],
+				["31", "http://meta.wordpress.stackexchange.com", "WordPress Meta"],
+				["32", "http://cstheory.stackexchange.com", "Theoretical Computer Science"],
+				["33", "http://meta.cstheory.stackexchange.com", "Theoretical Computer Science Meta"],
+				["34", "http://apple.stackexchange.com", "Apple"],
+				["35", "http://meta.apple.stackexchange.com", "Apple Meta"],
+				["36", "http://rpg.stackexchange.com", "Role-playing Games"],
+				["37", "http://meta.rpg.stackexchange.com", "Role-playing Games Meta"],
+				["38", "http://bicycles.stackexchange.com", "Bicycles"],
+				["39", "http://meta.bicycles.stackexchange.com", "Bicycles Meta"],
+				["40", "http://programmers.stackexchange.com", "Programmers"],
+				["41", "http://meta.programmers.stackexchange.com", "Programmers Meta"],
+				["42", "http://electronics.stackexchange.com", "Electrical Engineering"],
+				["43", "http://meta.electronics.stackexchange.com", "Electrical Engineering Meta"],
+				["44", "http://android.stackexchange.com", "Android Enthusiasts"],
+				["45", "http://meta.android.stackexchange.com", "Android Enthusiasts Meta"],
+				["46", "http://answers.onstartups.com", "OnStartups"],
+				["47", "http://meta.answers.onstartups.com", "OnStartups Meta"],
+				["48", "http://boardgames.stackexchange.com", "Board and Card Games"],
+				["49", "http://meta.boardgames.stackexchange.com", "Board and Card Games Meta"],
+				["50", "http://physics.stackexchange.com", "Physics"],
+				["51", "http://meta.physics.stackexchange.com", "Physics Meta"],
+				["52", "http://homebrew.stackexchange.com", "Homebrew"],
+				["53", "http://meta.homebrew.stackexchange.com", "Homebrew Meta"],
+				["54", "http://security.stackexchange.com", "IT Security"],
+				["55", "http://meta.security.stackexchange.com", "IT Security Meta"],
+				["56", "http://writers.stackexchange.com", "Writers"],
+				["57", "http://meta.writers.stackexchange.com", "Writers Meta"],
+				["58", "http://avp.stackexchange.com", "Audio-Video Production"],
+				["59", "http://meta.avp.stackexchange.com", "Audio-Video Production Meta"],
+				["60", "http://graphicdesign.stackexchange.com", "Graphic Design"],
+				["61", "http://meta.graphicdesign.stackexchange.com", "Graphic Design Meta"],
+				["62", "http://dba.stackexchange.com", "Database Administrators"],
+				["63", "http://meta.dba.stackexchange.com", "Database Administrators Meta"],
+				["64", "http://scifi.stackexchange.com", "Science Fiction and Fantasy"],
+				["65", "http://meta.scifi.stackexchange.com", "Science Fiction and Fantasy Meta"],
+				["66", "http://codereview.stackexchange.com", "Code Review"],
+				["67", "http://meta.codereview.stackexchange.com", "Code Review Meta"],
+				["68", "http://codegolf.stackexchange.com", "Code Golf"],
+				["69", "http://meta.codegolf.stackexchange.com", "Code Golf Meta"],
+				["70", "http://quant.stackexchange.com", "Quantitative Finance"],
+				["71", "http://meta.quant.stackexchange.com", "Quantitative Finance Meta"],
+				["72", "http://pm.stackexchange.com", "Project Management"],
+				["73", "http://meta.pm.stackexchange.com", "Project Management Meta"],
+				["74", "http://skeptics.stackexchange.com", "Skeptics"],
+				["75", "http://meta.skeptics.stackexchange.com", "Skeptics Meta"],
+				["76", "http://fitness.stackexchange.com", "Fitness and Nutrition"],
+				["77", "http://meta.fitness.stackexchange.com", "Fitness and Nutrition Meta"],
+				["78", "http://drupal.stackexchange.com", "Drupal Answers"],
+				["79", "http://meta.drupal.stackexchange.com", "Drupal Answers Meta"],
+				["80", "http://mechanics.stackexchange.com", "Motor Vehicle Maintenance and Repair"],
+				["81", "http://meta.mechanics.stackexchange.com", "Motor Vehicle Maintenance and Repair Meta"],
+				["82", "http://parenting.stackexchange.com", "Parenting"],
+				["83", "http://meta.parenting.stackexchange.com", "Parenting Meta"],
+				["84", "http://sharepoint.stackexchange.com", "SharePoint"],
+				["85", "http://meta.sharepoint.stackexchange.com", "SharePoint Meta"],
+				["86", "http://music.stackexchange.com", "Musical Practice and Performance"],
+				["87", "http://meta.music.stackexchange.com", "Musical Practice and Performance Meta"],
+				["88", "http://sqa.stackexchange.com", "Software Quality Assurance and Testing"],
+				["89", "http://meta.sqa.stackexchange.com", "Software Quality Assurance and Testing Meta"],
+				["90", "http://judaism.stackexchange.com", "Jewish Life and Learning"]
+			];
+		function run() {
+			var used_list, used_list_elm = document.getElementById('active_list'), unused_list_elm = document.getElementById('inactive_list');
+			if( localStorage["ss_site_list"] ) {
+				try{
+					console.log( JSON.parse(localStorage["ss_site_list"]) );
+					used_list = JSON.parse(localStorage["ss_site_list"]);
+					for( var i = 0, l = used_list.length; i < l; i++ ) {
+						var node = document.createElement('li');
+						node.appendChild(document.createTextNode(used_list[i][2]));
+						used_list_elm.appendChild( node );
+					}
+				} catch(e) {
+					console.log( "Invalid JSON: " + e );
+				}
+			}
+			for( var i = 0, l = se_site_list.length; i < l; i++ ) {
+				var node = document.createElement( 'option' );
+				node.value = se_site_list[i][0];
+				node.appendChild( document.createTextNode( se_site_list[i][2] ) );
+				unused_list_elm.appendChild( node );
+			}
+		}
+		function update(which) {
+			var i = which.selectedIndex;
+			console.log(i);
+		}
+		function save_options() {
+			//localStorage["ss_site_list"] = "Options updated";
+			chrome.extension.getBackgroundPage().se_site_list = se_site_list;
+			chrome.extension.getBackgroundPage().updateMenus();
+		}
+		</script>
+	</head>
+	<body onload="run()">
+		<h1>Stack Search Options</h1>
+		<select id="inactive_list" onchange="update(this)"></select>
+		<ul id="active_list"></ul>
+		<button onclick="save_options()">Save Options</button>
+	</body>
+</html>
