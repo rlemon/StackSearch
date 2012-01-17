@@ -1,6 +1,6 @@
 {
 	"name": "Stack Search",
-	"version": "0.1",
+	"version": "0.19",
 	"description": "Search your favorite Stack Exchange Site",
 	"icons": {
 		"16": "icon_16.png",
