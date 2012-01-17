@@ -1,6 +1,10 @@
 #Stack Search
 *Easily search your favorite Stack Exchange sites with this context menu extension*
+
 ###[CLICK HERE](https://github.com/rlemon/StackSearch/raw/master/package.crx) to install this extension.
+
+--------
+
 ![](http://i.stack.imgur.com/kP3kW.png)
 
 ![](http://i.stack.imgur.com/zcNaD.png)
