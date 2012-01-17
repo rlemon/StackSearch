@@ -2,18 +2,156 @@
 	<head>
 		<title>Stack Search Options</title>
 		<style type="text/css">
-		p {
-			min-width: 300px;
-		}
+			html,body,ul,li {
+				margin: 0;
+				padding: 0;
+			}
+			ul {
+				list-style:none;
+				width: 400px;
+			}
+			label { cursor:pointer;}
+			label, ul, h1, h2, h3, p { padding: 0 12px;}
+			li:hover { background-color: #ff0;}
+			.alt { background-color: #efefef;}
 		</style>
 		<script type="text/javascript">
+			function contains(needle, haystack) {
+				var i = haystack.length;
+				while (i--) {
+					if (haystack[i][0] == needle) {
+						return true;
+					}
+				}
+				return false;
+			}
 			function run() {
-				
+				var selected_list = chrome.extension.getBackgroundPage().json_to_array( localStorage["ss_site_list"] );
+				var site_list = document.forms["stack_search_options"].elements["sites"];
+				for( var i = 0, l = site_list.length; i < l; i++ ) {
+					if( contains( site_list[i].value, selected_list ) ) {
+						site_list[i].checked = "checked";
+					}
+					
+				}
+			}
+			function save_options() {
+				var selected_list = [];
+				var site_list = document.forms["stack_search_options"].elements["sites"];
+				for( var i = 0, l = site_list.length; i < l; i++ ) {
+					if( site_list[i].checked ) {
+						selected_list.push([site_list[i].value, site_list[i].parentNode.textContent]);
+					}
+				}
+				localStorage["ss_site_list"] = JSON.stringify( selected_list );
+				chrome.extension.getBackgroundPage().updateMenus();
+				alert("Your settings have been saved!"); // alerts suck.
 			}
 		</script>
 	</head>
 	<body onload="run()">
-		<p>Consider this will be a mirror of the site list on the Options page.</p>
-		<p>Is this really needed?</p>
+		<button onclick="save_options()">Save Options</button>
+		<form name="stack_search_options">
+<ul id="site_options_list"><li><label><input type="checkbox" value="http://stackoverflow.com" name="sites">Stack Overflow</label></li>
+<li class="alt"><label><input type="checkbox" value="http://serverfault.com" name="sites">Server Fault</label></li>
+<li><label><input type="checkbox" value="http://superuser.com" name="sites">Super User</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.stackoverflow.com" name="sites">Meta Stack Overflow</label></li>
+<li><label><input type="checkbox" value="http://webapps.stackexchange.com" name="sites">Web Applications</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.webapps.stackexchange.com" name="sites">Web Applications Meta</label></li>
+<li><label><input type="checkbox" value="http://gaming.stackexchange.com" name="sites">Gaming</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.gaming.stackexchange.com" name="sites">Gaming Meta</label></li>
+<li><label><input type="checkbox" value="http://webmasters.stackexchange.com" name="sites">Webmasters</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.webmasters.stackexchange.com" name="sites">Webmasters Meta</label></li>
+<li><label><input type="checkbox" value="http://cooking.stackexchange.com" name="sites">Cooking</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.cooking.stackexchange.com" name="sites">Cooking Meta</label></li>
+<li><label><input type="checkbox" value="http://gamedev.stackexchange.com" name="sites">Game Development</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.gamedev.stackexchange.com" name="sites">Game Development Meta</label></li>
+<li><label><input type="checkbox" value="http://photo.stackexchange.com" name="sites">Photography</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.photo.stackexchange.com" name="sites">Photography Meta</label></li>
+<li><label><input type="checkbox" value="http://stats.stackexchange.com" name="sites">Statistical Analysis</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.stats.stackexchange.com" name="sites">Statistical Analysis Meta</label></li>
+<li><label><input type="checkbox" value="http://math.stackexchange.com" name="sites">Mathematics</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.math.stackexchange.com" name="sites">Mathematics Meta</label></li>
+<li><label><input type="checkbox" value="http://diy.stackexchange.com" name="sites">Home Improvement</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.diy.stackexchange.com" name="sites">Home Improvement Meta</label></li>
+<li><label><input type="checkbox" value="http://meta.superuser.com" name="sites">Meta Super User</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.serverfault.com" name="sites">Meta Server Fault</label></li>
+<li><label><input type="checkbox" value="http://gis.stackexchange.com" name="sites">GIS</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.gis.stackexchange.com" name="sites">GIS Meta</label></li>
+<li><label><input type="checkbox" value="http://tex.stackexchange.com" name="sites">TeX - LaTeX</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.tex.stackexchange.com" name="sites">TeX - LaTeX Meta</label></li>
+<li><label><input type="checkbox" value="http://askubuntu.com" name="sites">Ask Ubuntu</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.askubuntu.com" name="sites">Ask Ubuntu Meta</label></li>
+<li><label><input type="checkbox" value="http://money.stackexchange.com" name="sites">Personal Finance and Money</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.money.stackexchange.com" name="sites">Personal Finance and Money Meta</label></li>
+<li><label><input type="checkbox" value="http://english.stackexchange.com" name="sites">English Language and Usage</label></li>
+<li class="alt"><label><input type="checkbox" value="http://meta.english.stackexchange.com" name="sites">English Language and Usage Meta</label></li>
+<li><label><input type="checkbox" value="http://stackapps.com" name="sites">Stack Apps</label></li>
+<li class="alt"><label><input type="checkbox" value="http://ux.stackexchange.com" name="sites">User Experience</label></li>
+<li><label><input type="checkbox" value="http://meta.ux.stackexchange.com" name="sites">User Experience Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://unix.stackexchange.com" name="sites">Unix and Linux</label></li>
+<li><label><input type="checkbox" value="http://meta.unix.stackexchange.com" name="sites">Unix and Linux Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://wordpress.stackexchange.com" name="sites">WordPress</label></li>
+<li><label><input type="checkbox" value="http://meta.wordpress.stackexchange.com" name="sites">WordPress Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://cstheory.stackexchange.com" name="sites">Theoretical Computer Science</label></li>
+<li><label><input type="checkbox" value="http://meta.cstheory.stackexchange.com" name="sites">Theoretical Computer Science Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://apple.stackexchange.com" name="sites">Apple</label></li>
+<li><label><input type="checkbox" value="http://meta.apple.stackexchange.com" name="sites">Apple Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://rpg.stackexchange.com" name="sites">Role-playing Games</label></li>
+<li><label><input type="checkbox" value="http://meta.rpg.stackexchange.com" name="sites">Role-playing Games Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://bicycles.stackexchange.com" name="sites">Bicycles</label></li>
+<li><label><input type="checkbox" value="http://meta.bicycles.stackexchange.com" name="sites">Bicycles Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://programmers.stackexchange.com" name="sites">Programmers</label></li>
+<li><label><input type="checkbox" value="http://meta.programmers.stackexchange.com" name="sites">Programmers Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://electronics.stackexchange.com" name="sites">Electrical Engineering</label></li>
+<li><label><input type="checkbox" value="http://meta.electronics.stackexchange.com" name="sites">Electrical Engineering Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://android.stackexchange.com" name="sites">Android Enthusiasts</label></li>
+<li><label><input type="checkbox" value="http://meta.android.stackexchange.com" name="sites">Android Enthusiasts Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://answers.onstartups.com" name="sites">OnStartups</label></li>
+<li><label><input type="checkbox" value="http://meta.answers.onstartups.com" name="sites">OnStartups Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://boardgames.stackexchange.com" name="sites">Board and Card Games</label></li>
+<li><label><input type="checkbox" value="http://meta.boardgames.stackexchange.com" name="sites">Board and Card Games Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://physics.stackexchange.com" name="sites">Physics</label></li>
+<li><label><input type="checkbox" value="http://meta.physics.stackexchange.com" name="sites">Physics Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://homebrew.stackexchange.com" name="sites">Homebrew</label></li>
+<li><label><input type="checkbox" value="http://meta.homebrew.stackexchange.com" name="sites">Homebrew Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://security.stackexchange.com" name="sites">IT Security</label></li>
+<li><label><input type="checkbox" value="http://meta.security.stackexchange.com" name="sites">IT Security Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://writers.stackexchange.com" name="sites">Writers</label></li>
+<li><label><input type="checkbox" value="http://meta.writers.stackexchange.com" name="sites">Writers Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://avp.stackexchange.com" name="sites">Audio-Video Production</label></li>
+<li><label><input type="checkbox" value="http://meta.avp.stackexchange.com" name="sites">Audio-Video Production Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://graphicdesign.stackexchange.com" name="sites">Graphic Design</label></li>
+<li><label><input type="checkbox" value="http://meta.graphicdesign.stackexchange.com" name="sites">Graphic Design Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://dba.stackexchange.com" name="sites">Database Administrators</label></li>
+<li><label><input type="checkbox" value="http://meta.dba.stackexchange.com" name="sites">Database Administrators Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://scifi.stackexchange.com" name="sites">Science Fiction and Fantasy</label></li>
+<li><label><input type="checkbox" value="http://meta.scifi.stackexchange.com" name="sites">Science Fiction and Fantasy Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://codereview.stackexchange.com" name="sites">Code Review</label></li>
+<li><label><input type="checkbox" value="http://meta.codereview.stackexchange.com" name="sites">Code Review Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://codegolf.stackexchange.com" name="sites">Code Golf</label></li>
+<li><label><input type="checkbox" value="http://meta.codegolf.stackexchange.com" name="sites">Code Golf Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://quant.stackexchange.com" name="sites">Quantitative Finance</label></li>
+<li><label><input type="checkbox" value="http://meta.quant.stackexchange.com" name="sites">Quantitative Finance Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://pm.stackexchange.com" name="sites">Project Management</label></li>
+<li><label><input type="checkbox" value="http://meta.pm.stackexchange.com" name="sites">Project Management Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://skeptics.stackexchange.com" name="sites">Skeptics</label></li>
+<li><label><input type="checkbox" value="http://meta.skeptics.stackexchange.com" name="sites">Skeptics Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://fitness.stackexchange.com" name="sites">Fitness and Nutrition</label></li>
+<li><label><input type="checkbox" value="http://meta.fitness.stackexchange.com" name="sites">Fitness and Nutrition Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://drupal.stackexchange.com" name="sites">Drupal Answers</label></li>
+<li><label><input type="checkbox" value="http://meta.drupal.stackexchange.com" name="sites">Drupal Answers Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://mechanics.stackexchange.com" name="sites">Motor Vehicle Maintenance and Repair</label></li>
+<li><label><input type="checkbox" value="http://meta.mechanics.stackexchange.com" name="sites">Motor Vehicle Maintenance and Repair Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://parenting.stackexchange.com" name="sites">Parenting</label></li>
+<li><label><input type="checkbox" value="http://meta.parenting.stackexchange.com" name="sites">Parenting Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://sharepoint.stackexchange.com" name="sites">SharePoint</label></li>
+<li><label><input type="checkbox" value="http://meta.sharepoint.stackexchange.com" name="sites">SharePoint Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://music.stackexchange.com" name="sites">Musical Practice and Performance</label></li>
+<li><label><input type="checkbox" value="http://meta.music.stackexchange.com" name="sites">Musical Practice and Performance Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://sqa.stackexchange.com" name="sites">Software Quality Assurance and Testing</label></li>
+<li><label><input type="checkbox" value="http://meta.sqa.stackexchange.com" name="sites">Software Quality Assurance and Testing Meta</label></li>
+<li class="alt"><label><input type="checkbox" value="http://judaism.stackexchange.com" name="sites">Jewish Life and Learning</label></li></ul>
+		</form>
 	</body>
 </html>
