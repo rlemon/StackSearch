@@ -1,1 +1,18 @@
-<script src="stacksearch.js"></script>
+<script type="text/javascript">
+function buildURL(page) {
+	return "http://api.stackexchange.com/2.0/sites?page=" + page + "&pagesize=100&filter=!LQukQ-uVfJGchnRIp_f0_O&callback=run";
+}
+function jsonp(url) {
+	var script_tag = document.createElement('script');
+	script_tag.src = url;
+	document.documentElement.appendChild(script_tag);
+}
+function run(json) {
+	se_site_list = se_site_list.concat(json.items);
+	if( json.has_more ) {
+		jsonp( buildURL(json.page+1) );
+	}
+}
+var se_site_list = [];
+jsonp( buildURL(1) );
+</script>
