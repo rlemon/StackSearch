@@ -16,11 +16,44 @@
 			.alt { background-color: #efefef;}
 		</style>
 		<script type="text/javascript">
+/*
+		function contains(needle, haystack) {
+			var i = haystack.length;
+			while (i--) {
+				if (haystack[i][0] == needle) {
+					return true;
+				}
+			}
+			return false;
+		}
+		function run() {
+			var selected_list = chrome.extension.getBackgroundPage().json_to_array( localStorage["ss_site_list"] );
+			var site_list = document.forms["stack_search_options"].elements["sites"];
+			for( var i = 0, l = site_list.length; i < l; i++ ) {
+				if( contains( site_list[i].value, selected_list ) ) {
+					site_list[i].checked = "checked";
+				}
+				
+			}
+		}*/
+		function save_options() {
+			var selected_list = [];
+			var site_list = document.forms["stack_search_options"].elements["sites"];
+			for( var i = 0, l = site_list.length; i < l; i++ ) {
+				if( site_list[i].checked ) {
+					selected_list.push([site_list[i].value, site_list[i].parentNode.textContent]);
+				}
+			}
+			localStorage["ss_site_list"] = JSON.stringify( selected_list );
+			chrome.extension.getBackgroundPage().make_menus();
+			alert("Your settings have been saved!"); // alerts suck.
+		}
+			
 			function run() {
 				var se_site_list = chrome.extension.getBackgroundPage().se_site_list,
 					site_options_list = document.getElementById('site_options_list');
 				for( var i = 0, l = se_site_list.length; i < l; i++ ) {
-					site_options_list.innerHTML += "<li>" + se_site_list[i].name + "</li>";
+					site_options_list.innerHTML += '<li><label><input type="checkbox" value="' + se_site_list[i].site_url + '" name="sites">' + se_site_list[i].name + "</label></li>";
 				}
 			}
 		</script>
