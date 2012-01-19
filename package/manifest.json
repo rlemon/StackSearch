@@ -1,6 +1,6 @@
 {
 	"name": "Stack Search",
-	"version": "0.19",
+	"version": "0.2",
 	"description": "Search your favorite Stack Exchange Site",
 	"icons": {
 		"16": "icon_16.png",
@@ -13,6 +13,5 @@
 		"default_popup": "popup.html"
 	},
 	"background_page": "background.html",
-	"options_page": "options.html",
 	"permissions": ["contextMenus"]
 }

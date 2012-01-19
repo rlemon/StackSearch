@@ -16,50 +16,64 @@
 			.alt { background-color: #efefef;}
 		</style>
 		<script type="text/javascript">
-/*
+		var bg_page;
 		function contains(needle, haystack) {
 			var i = haystack.length;
 			while (i--) {
-				if (haystack[i][0] == needle) {
+				if (haystack[i].site_url == needle.site_url) {
 					return true;
 				}
 			}
 			return false;
 		}
-		function run() {
-			var selected_list = chrome.extension.getBackgroundPage().json_to_array( localStorage["ss_site_list"] );
-			var site_list = document.forms["stack_search_options"].elements["sites"];
-			for( var i = 0, l = site_list.length; i < l; i++ ) {
-				if( contains( site_list[i].value, selected_list ) ) {
-					site_list[i].checked = "checked";
-				}
-				
-			}
-		}*/
 		function save_options() {
 			var selected_list = [];
 			var site_list = document.forms["stack_search_options"].elements["sites"];
 			for( var i = 0, l = site_list.length; i < l; i++ ) {
 				if( site_list[i].checked ) {
-					selected_list.push([site_list[i].value, site_list[i].parentNode.textContent]);
+					selected_list.push({'name': site_list[i].parentNode.textContent, 'site_url': site_list[i].value});
+					site_list[i].setAttribute('checked', 'checked');
+				} else {
+					site_list[i].removeAttribute('checked');
 				}
 			}
 			localStorage["ss_site_list"] = JSON.stringify( selected_list );
-			chrome.extension.getBackgroundPage().make_menus();
-			alert("Your settings have been saved!"); // alerts suck.
+			localStorage["ss_site_html"] = document.getElementById('site_options_list').innerHTML;
+			bg_page.make_menus();
+			closeme()
 		}
-			
+		function reload_sites() {
+			localStorage.removeItem("ss_site_html");
+			bg_page.jsonp( bg_page.buildURL(1) );
+			closeme()
+		}
+		function closeme() {
+			window.close();
+		}
 			function run() {
-				var se_site_list = chrome.extension.getBackgroundPage().se_site_list,
+				bg_page  = chrome.extension.getBackgroundPage();
+				var se_site_list = bg_page.se_site_list,
+					selected_list = bg_page.json_to_array( localStorage["ss_site_list"] ),
 					site_options_list = document.getElementById('site_options_list');
-				for( var i = 0, l = se_site_list.length; i < l; i++ ) {
-					site_options_list.innerHTML += '<li><label><input type="checkbox" value="' + se_site_list[i].site_url + '" name="sites">' + se_site_list[i].name + "</label></li>";
+				if( typeof localStorage["ss_site_html"] != 'undefined' ) {
+					site_options_list.innerHTML = localStorage["ss_site_html"];
+				} else {
+					site_options_list.innerHTML = "";
+					for( var i = 0, l = se_site_list.length; i < l+1; i++ ) {
+						var checked = '';
+						if( contains( se_site_list[i], selected_list ) ) {
+							checked = ' checked="checked"';
+						}
+						site_options_list.innerHTML += '<li><label><input type="checkbox"' + checked +' value="' + se_site_list[i].site_url + '" name="sites">' + se_site_list[i].name + '</label></li>';
+					}
 				}
 			}
 		</script>
 	</head>
 	<body onload="run()">
 		<button onclick="save_options()">Save Options</button>
+		<button onclick="reload_sites()">Reload Sites</button>
+		<button onclick="closeme()">Close Me</button>
 		<form name="stack_search_options">
 		<ul id="site_options_list"></ul>
 		</form>
