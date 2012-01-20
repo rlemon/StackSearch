@@ -1,0 +1,177 @@
+<html>
+	<head>
+		<title>Stack Search Options</title>
+		<style type="text/css">
+html,body {
+	margin: 0;
+	padding: 0;
+	background-color: #002b36;
+}
+ul {
+	list-style: none;
+	width: 400px;
+	margin: 0;
+	padding: 6px;
+}
+.container button {
+	cursor: pointer;
+	width: 104px;
+	padding: 6px 0;
+	margin: 6px 12px;
+}
+ul li {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	padding: 2px 0;
+}
+ul li:hover {
+	background-color: #073642;
+}
+li > input {
+	padding: 0;
+	margin: 0;
+	height: 16px;
+	width: 16px;
+	float: left;
+	position: absolute;
+	left: 0;
+	opacity: 0;
+}
+li > label {
+	cursor: pointer;
+	float: left;
+	line-height: 16px;
+	width: 100%;
+	color: #fff;
+	padding: 0 0 0 32px;
+	-moz-transition: color 0.5s ease;
+	-o-transition: color 0.5s ease;
+	-webkit-transition: color 0.5s ease;
+	transition: color 0.5s ease;
+}
+li > input:hover + label, li > input:focus + label,
+li > input + label:hover, li > input:focus + label {
+	text-shadow: 1px 1px 3px #000;
+	color: #2C7AD0;
+}
+li > input + label {
+	background: url(gr_custom-inputs.png) 0 -1px no-repeat;
+	height: 16px;
+}
+/* Checked styles */
+li > input[type=checkbox]:checked + label {
+	background-position: 0 -81px;
+}
+li > input[type=checkbox]:hover:checked + label,
+li > input[type=checkbox]:focus:checked + label,
+li > input[type=checkbox]:checked + label:hover,
+li > input[type=checkbox]:focus:checked + label {
+	background-position: 0 -101px;
+}
+/* Hover  Focus styles */
+li > input[type=checkbox]:hover + label,
+li > input[type=checkbox]:focus + label,
+li > input[type=checkbox] + label:hover {
+	background-position: 0 -21px;
+}
+/* Active styles */
+li > input[type=checkbox]:active + label,
+li > input[type=checkbox] + label:hover:active {
+	background-position: 0 -41px;
+}
+li > input[type=checkbox]:active:checked + label,
+li > input[type=checkbox]:checked + label:hover:active {
+	background-position: 0 -121px;
+}
+/* Disabled styles */
+li > input[type=checkbox]:disabled + label,
+li > input[type=checkbox]:hover:disabled + label,
+li > input[type=checkbox]:focus:disabled + label,
+li > input[type=checkbox]:disabled + label:hover,
+li > input[type=checkbox]:disabled + label:hover:active {
+	background-position: 0 -61px;
+}
+li > input[type=checkbox]:disabled:checked + label,
+li > input[type=checkbox]:hover:disabled:checked + label,
+li > input[type=checkbox]:focus:disabled:checked + label,
+li > input[type=checkbox]:disabled:checked + label:hover,
+li > input[type=checkbox]:disabled:checked + label:hover:active {
+	background-position: 0 -141px;
+}
+		</style>
+		<script type="text/javascript">
+var bg_page;
+
+function contains(needle, haystack) {
+	var i = haystack.length;
+	while (i--) {
+		if (haystack[i].site_url == needle.site_url) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function save_options() {
+	var selected_list = [];
+	var site_list = document.forms["stack_search_options"].elements["sites"];
+	for (var i = 0, l = site_list.length; i < l; i++) {
+		if (site_list[i].checked) {
+			selected_list.push({
+				'name': site_list[i].parentNode.textContent,
+				'site_url': site_list[i].value
+			});
+			site_list[i].setAttribute('checked', 'checked');
+		} else {
+			site_list[i].removeAttribute('checked');
+		}
+	}
+	localStorage["ss_site_list"] = JSON.stringify(selected_list);
+	localStorage["ss_site_html"] = document.getElementById('site_options_list').innerHTML;
+	bg_page.make_menus();
+	closeme()
+}
+
+function reload_sites() {
+	localStorage.removeItem("ss_site_html");
+	bg_page.jsonp(bg_page.buildURL(1));
+	closeme()
+}
+
+function closeme() {
+	window.close();
+}
+
+function run() {
+	bg_page = chrome.extension.getBackgroundPage();
+	var se_site_list = bg_page.se_site_list,
+		selected_list = bg_page.json_to_array(localStorage["ss_site_list"]),
+		site_options_list = document.getElementById('site_options_list');
+	if (typeof localStorage["ss_site_html"] != 'undefined') {
+		site_options_list.innerHTML = localStorage["ss_site_html"];
+	} else {
+		site_options_list.innerHTML = "";
+		for (var i = 0, l = se_site_list.length; i < l + 1; i++) {
+			var checked = '';
+			if (contains(se_site_list[i], selected_list)) {
+				checked = ' checked="checked"';
+			}
+			var alt = i % 2 ? ' class="alt"' : '';
+			site_options_list.innerHTML += '<li' + alt + '><input id="li' + i + '" type="checkbox"' + checked + ' value="' + se_site_list[i].site_url + '" name="sites"><label for="li' + i + '">' + se_site_list[i].name + '</label></li>';
+		}
+	}
+}
+		</script>
+	</head>
+	<body onload="run()">
+		<div class="container">
+			<button onclick="save_options()">Save Options</button>
+			<button onclick="reload_sites()">Reload Sites</button>
+			<button onclick="closeme()">Close Me</button>
+		</div>
+		<form name="stack_search_options">
+			<ul id="site_options_list"></ul>
+		</form>
+	</body>
+</html>
